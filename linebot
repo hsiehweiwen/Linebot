@@ -1,0 +1,32 @@
+from flask import flask,request,abort
+from linebot import LineBotApi,WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import *
+imporrt os
+
+app=Flask(__name__)
+
+line_bot_api=LineBotApi(osenviron(['GKLL94sdM4SFAecVFhJK6QVtdsuUl/kSHZ6n1uevHDIozvMKbyI0eYL1Hps46K4HoWrgP/CPLYBjoynZlZsGBXTRNIal6PjvndwtBtPfw7RixpwjBgLqXQdvW1IjVj3n9QDHmNeChm6ISnq3q7GFJAdB04t89/1O/w1cDnyilFU='])
+handler=WebhookHandler(os.environ['2d8ff9ecfdd18f8523c3895b9cfc8b24'])
+
+
+@app.route("/callback",methods=['POST'])
+def callback();
+  signature=request.headers['X-Line-Signature']
+  body=request.get_data(as_text=True)
+  app.logger.info("Request body:"+body)
+  try:
+    handler.handle(body,signature)
+  except InvalidSignatureError
+    abort(400)
+  return 'OK'
+
+@handler.add(MessageEvent,message=TextMessage)
+def handle_message(event)
+  message=TextSendMessage(text=event.message.text)
+  line_bot_api.reply_message(event.reply_token,message)
+
+import os
+if __name__ ="__main__":
+  port =int(os.environ.get('PORT',5000))
+  app.run(host='0.0.0.0',port=port)
